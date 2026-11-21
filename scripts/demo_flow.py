@@ -1,7 +1,8 @@
 """Demo flow for the 2-minute screen recording.
 
-Usage:  python scripts/demo_flow.py [base_url]
+Usage:  python scripts/demo_flow.py [--step] [base_url]
         base_url defaults to http://127.0.0.1:8000 (docker compose up)
+        --step pauses for Enter between steps, for narrating the recording.
 
 Prints each step and the API's reply so the flow reads well on screen.
 Works with a real LLM (GROQ_API_KEY in .env) or with the deterministic
@@ -17,10 +18,18 @@ import sys
 
 import httpx
 
-BASE = sys.argv[1] if len(sys.argv) > 1 else "http://127.0.0.1:8000"
+_ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
+STEP = "--step" in sys.argv
+BASE = _ARGS[0] if _ARGS else "http://127.0.0.1:8000"
+
+
+def pause() -> None:
+    if STEP:
+        input("\n---- press Enter for the next step ----")
 
 
 def show(title: str, payload: dict) -> None:
+    pause()
     print(f"\n=== {title} ===")
     print(json.dumps(payload, indent=2, ensure_ascii=False))
 
