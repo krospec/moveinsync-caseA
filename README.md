@@ -22,10 +22,12 @@ docker compose up
 That's it. The app (FastAPI) and Postgres come up, schema is created and the
 two sample companies are seeded automatically. API on http://localhost:8000 .
 
-For real LLM replies, copy `.env.example` to `.env` and put a free
-[Groq](https://console.groq.com/keys) key in it first. Without a key the
-service still boots and every chat gets a graceful *"assistant unavailable,
-call the transport desk"* reply — the rules engine keeps working.
+**No API key is needed to run any of this.** Without one, a deterministic
+offline assistant takes over (see *Design decisions §6b*): the same tools,
+the same code-enforced rules, templated wording. To see the real LLM drive
+the conversation, copy `.env.example` to `.env`, put a free
+[Groq](https://console.groq.com/keys) key in it, and re-run
+`docker compose up -d --build` — chat replies then get natural LLM wording.
 
 ### One tour of the API (with a real or fake LLM)
 

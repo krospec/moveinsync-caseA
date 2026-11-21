@@ -8,8 +8,8 @@ The lifespan does four things, once per process:
      - sqlite (dev/tests):    AsyncSqliteSaver  -> same mechanics on a file
 4. build the ChatService around it
 
-Nothing here needs an LLM key at startup; without one, chat requests fail over
-to the friendly "assistant unavailable" message instead of crashing.
+Nothing here needs an LLM key at startup; without one, the deterministic
+offline assistant takes over and every flow still works.
 """
 import logging
 from contextlib import asynccontextmanager
