@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: movein
+      POSTGRES_PASSWORD: movein
+      POSTGRES_DB: movein
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U movein -d movein"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+asyncpg://movein:movein@db:5432/movein
+      # Free-tier LLM. Get a key at https://console.groq.com/keys and put it
+      # in .env next to this file (see .env.example). Without a key the API
+      # still boots and chat replies with a graceful "assistant unavailable".
+      LLM_PROVIDER: ${LLM_PROVIDER:-groq}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      GROQ_MODEL: ${GROQ_MODEL:-}
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production-secret}
+      TIMEZONE: Asia/Kolkata
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:

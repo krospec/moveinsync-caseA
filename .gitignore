@@ -1,0 +1,19 @@
+# secrets & env
+.env
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+
+# local dev data
+dev.db
+*.db
+data/
+
+# scratch
+diag_*.py
+extract/
+*.db-shm
+*.db-wal
